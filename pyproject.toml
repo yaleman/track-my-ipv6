@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "track-my-ipv6"
+version = "0.0.1"
+description = "Simple little script for me to watch the IPv6 addresses on my macbook as they keep changing over and over."
+authors = ["James Hodgkinson <james@terminaloutcomes.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.dev-dependencies]
+ifcfg = "^0.22"
+tinydb = "^4.7.0"
+loguru = "^0.6.0"
+requests = "^2.27.1"
+click = "^8.1.2"
+black = "^22.3.0"
+pylint = "^2.13.7"
+mypy = "^0.942"
+pytest = "^7.1.1"
+types-requests = "^2.27.20"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+track-my-ipv6 = "track_my_ipv6:cli"
