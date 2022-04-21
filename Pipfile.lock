@@ -49,11 +49,11 @@
         },
         "ifcfg": {
             "hashes": [
-                "sha256:5f96ce813c2964cf292429ba683b1278afa80043b11a479d829ce8246546a605",
-                "sha256:d18d8e379a67e86b6d1170177cf317efd5afbc321d2a5081618754f9ebe2cb53"
+                "sha256:2960e94e197092877309905dbe18a297c48585f88007be265e0593adae640cd1",
+                "sha256:835825759d7a27ae1b11577f826b9ebbda716fc69c47805c8844fd516346e81a"
             ],
             "index": "pypi",
-            "version": "==0.21"
+            "version": "==0.22"
         },
         "loguru": {
             "hashes": [
