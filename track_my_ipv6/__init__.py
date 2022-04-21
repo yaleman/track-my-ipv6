@@ -50,7 +50,7 @@ def do_run(db_object: TinyDB) -> None:
                             "ether" : ether,
                             "interface" : name,
                             })
-                        logmsg = "message=\"New address found\" interface=\"{}\" address=\"{}\" mac=\"{}\"" # pylint: disable
+                        logmsg = "message=\"New address found\" interface=\"{}\" address=\"{}\" mac=\"{}\"" # pylint: disable: line-too-long
                         logger.info(logmsg, name, address, ether)
                         found_new_address = True
                 if not found_new_address:
