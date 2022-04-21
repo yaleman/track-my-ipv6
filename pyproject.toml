@@ -2,7 +2,9 @@
 name = "track-my-ipv6"
 version = "0.0.1"
 description = "Simple little script for me to watch the IPv6 addresses on my macbook as they keep changing over and over."
-authors = ["James Hodgkinson <james@terminaloutcomes.com>"]
+authors = [
+    "James Hodgkinson <james@terminaloutcomes.com>",
+]
 license = "MIT"
 
 [tool.poetry.dependencies]
@@ -20,9 +22,20 @@ mypy = "^0.942"
 pytest = "^7.1.1"
 types-requests = "^2.27.20"
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
 [tool.poetry.scripts]
 track-my-ipv6 = "track_my_ipv6:cli"
+
+[build-system]
+requires = [
+    "poetry-core>=1.0.0",
+]
+build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "track-my-ipv6"
+description = "Simple little script for me to watch the IPv6 addresses on my macbook as they keep changing over and over."
+license = "MIT"
+version = "0.0.1"
+authors = [
+    { name = "James Hodgkinson", email = "james@terminaloutcomes.com" },
+]
