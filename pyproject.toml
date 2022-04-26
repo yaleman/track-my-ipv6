@@ -10,6 +10,10 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "^3.9"
 
+
+[tool.poetry.dependencies.splunk-hec]
+url = "https://github.com/georgestarcher/Splunk-Class-httpevent/archive/refs/heads/master.tar.gz"
+
 [tool.poetry.dev-dependencies]
 ifcfg = "^0.22"
 tinydb = "^4.7.0"

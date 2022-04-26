@@ -4,16 +4,18 @@
     also click, loguru, tinydb, ifcfg
 """
 
-from time import time, sleep
+import json
 import sys
+from time import time, sleep
+from typing import Any
 
 try:
     import ifcfg # type: ignore
     import click
     from loguru import logger
     from tinydb import TinyDB, Query
-    from splunklogger import SplunkLogger, setup_logging
 
+    from splunk_http_event_collector import http_event_collector # type: ignore
     from config import SPLUNK_HEC_HOST, SPLUNK_HEC_TOKEN, SPLUNK_SOURCETYPE, SPLUNK_INDEX
 except ImportError as error_message:
     print(f"Failed to import {error_message.name}, bailing. Error: {error_message}")
@@ -50,30 +52,67 @@ def do_run(db_object: TinyDB) -> None:
                             "ether" : ether,
                             "interface" : name,
                             })
-                        logmsg = "message=\"New address found\" interface=\"{}\" address=\"{}\" mac=\"{}\"" # pylint: disable: line-too-long
-                        logger.info(logmsg, name, address, ether)
+                        logmsg = json.dumps({
+                            "message":"New address found",
+                            "interface": name,
+                            "address" : address,
+                            "mac" : ether,
+                        })
+                        logger.info(logmsg)
                         found_new_address = True
                 if not found_new_address:
                     logger.debug("No new interfaces found")
 
+class SplunkLogger:
+    """ logs through hec """
+    def __init__(self) -> None:
+        self.logger  = http_event_collector(
+            token=SPLUNK_HEC_TOKEN,
+            http_event_server=SPLUNK_HEC_HOST,
+            http_event_port=443,
+        )
+        self.logger.sourcetype = SPLUNK_SOURCETYPE
+        self.logger.index = SPLUNK_INDEX
+
+    def send(
+        self,
+        message: Any,
+        ) -> None:
+        """ sends a message to splunk """
+        payload = {
+            "event" : {
+                "log_level" : message.record["level"].name,
+            }
+        }
+        try:
+            payload["event"].update(json.loads(message.record["message"]))
+        except json.JSONDecodeError as error:
+            print(f"no json here... {error} - {message.record['message']}")
+            payload["event"]  = message.record["message"]
+        self.logger.sendEvent(
+            payload=payload,
+            eventtime=message.record["time"].strftime("%s"),
+            )
+
+    def __del__(self) -> None:
+        """ flush queue before quitting """
+        self.logger.flushBatch()
+
 
 @click.command()
-@click.option('--debug','-d',is_flag=True, default=False)
-def cli(debug: bool=False) -> None:
+@click.option("--disable-splunk", is_flag=True, default=False)
+def cli(disable_splunk: bool=False) -> None:
     """ command line interface """
 
+    if not disable_splunk:
+        splunklogger = SplunkLogger()
 
-    splunklogger = SplunkLogger(endpoint=f"https://{SPLUNK_HEC_HOST}/services/collector",
-                                token=SPLUNK_HEC_TOKEN,
-                                sourcetype=SPLUNK_SOURCETYPE,
-                                index_name=SPLUNK_INDEX,
-                                )
-    logger.add(splunklogger.splunk_logger,
-            format="{message}",
-            serialize=False,
-            colorize=False,
-            )
-    setup_logging(logger, debug, use_default_loguru=False)
+        logger.add(splunklogger.send,
+                format="{message}",
+                serialize=True,
+                colorize=False,
+                level="INFO",
+                )
 
     database = TinyDB('./database.db')
     while True:

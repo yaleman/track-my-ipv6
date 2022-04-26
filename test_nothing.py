@@ -1,4 +1,5 @@
 """ tests nothing """
 
-def test_nothing():
-    """ doesn't test anything """
+
+def test_nothing() -> None:
+    """doesn't test anything"""

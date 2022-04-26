@@ -1,1 +1,0 @@
-../splunkhec/splunkhec/splunklogger.py
