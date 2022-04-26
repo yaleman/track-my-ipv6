@@ -110,7 +110,8 @@ def load_config(config_path: str) -> Optional[Dict[str,str]]:
         return None
     with config_file.open(encoding="utf-8") as file_handle:
         try:
-            return json.load(file_handle)
+            result: Dict[str,str] = json.load(file_handle)
+            return result
         except json.JSONDecodeError as jsonerror:
             logger.error("Failed to parse config file, disabling splunk logging: {}", jsonerror)
     return None
