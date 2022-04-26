@@ -6,8 +6,9 @@
 
 import json
 import sys
+from pathlib import Path
 from time import time, sleep
-from typing import Any
+from typing import Any, Dict, Optional
 
 try:
     import ifcfg # type: ignore
@@ -16,7 +17,6 @@ try:
     from tinydb import TinyDB, Query
 
     from splunk_http_event_collector import http_event_collector # type: ignore
-    from config import SPLUNK_HEC_HOST, SPLUNK_HEC_TOKEN, SPLUNK_SOURCETYPE, SPLUNK_INDEX
 except ImportError as error_message:
     print(f"Failed to import {error_message.name}, bailing. Error: {error_message}")
     sys.exit(1)
@@ -65,14 +65,17 @@ def do_run(db_object: TinyDB) -> None:
 
 class SplunkLogger:
     """ logs through hec """
-    def __init__(self) -> None:
+    def __init__(self, config: Dict[str, str]) -> None:
         self.logger  = http_event_collector(
-            token=SPLUNK_HEC_TOKEN,
-            http_event_server=SPLUNK_HEC_HOST,
-            http_event_port=443,
+            token=config["splunk_token"],
+            http_event_server=config["splunk_host"],
+            http_event_port=config.get("splunk_port", 443),
+            http_event_server_ssl=True,
+
         )
-        self.logger.sourcetype = SPLUNK_SOURCETYPE
-        self.logger.index = SPLUNK_INDEX
+        self.logger.SSL_verify=True
+        self.logger.sourcetype = config["splunk_sourcetype"]
+        self.logger.index = config["splunk_index"]
 
     def send(
         self,
@@ -99,13 +102,35 @@ class SplunkLogger:
         self.logger.flushBatch()
 
 
+def load_config(config_path: str) -> Optional[Dict[str,str]]:
+    """ loads config """
+    config_file = Path(config_path).expanduser().resolve()
+    if not config_file.exists():
+        logger.warning("Can't find config file ({}), disabling splunk logging", config_file)
+        return None
+    with config_file.open(encoding="utf-8") as file_handle:
+        try:
+            return json.load(file_handle)
+        except json.JSONDecodeError as jsonerror:
+            logger.error("Failed to parse config file, disabling splunk logging: {}", jsonerror)
+    return None
+
+
 @click.command()
 @click.option("--disable-splunk", is_flag=True, default=False)
-def cli(disable_splunk: bool=False) -> None:
+@click.option("--oneshot", is_flag=True, default=False)
+@click.option("--config", "-c", default="track-my-ipv6.json", help="Configuration file path.")
+def cli(
+    disable_splunk: bool=False,
+    config: str="track-my-ipv6.json",
+    oneshot: bool=False,
+    ) -> None:
     """ command line interface """
 
-    if not disable_splunk:
-        splunklogger = SplunkLogger()
+    configuration = load_config(config)
+
+    if not disable_splunk and configuration is not None:
+        splunklogger = SplunkLogger(configuration)
 
         logger.add(splunklogger.send,
                 format="{message}",
@@ -115,7 +140,10 @@ def cli(disable_splunk: bool=False) -> None:
                 )
 
     database = TinyDB('./database.db')
+
     while True:
         do_run(database)
+        if oneshot:
+            break
         logger.debug("Sleeping for {} seconds...", SLEEP_TIME)
         sleep(SLEEP_TIME)

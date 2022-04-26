@@ -1,0 +1,6 @@
+{
+    "splunk_host" : "hec.example.com",
+    "splunk_token" : "supersecrettokenthing",
+    "splunk_sourcetype" : "trackipv6",
+    "splunk_index" : "monitoring"
+}

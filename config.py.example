@@ -1,4 +1,0 @@
-SPLUNK_HEC_HOST = 'localhost'
-SPLUNK_HEC_TOKEN = 'supersecretuuid'
-SPLUNK_SOURCETYPE = 'trackipv6'
-SPLUNK_INDEX = 'monitoring'
