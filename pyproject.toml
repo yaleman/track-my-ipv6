@@ -24,7 +24,7 @@ black = "^22.3.0"
 pylint = "^2.13.9"
 mypy = "^0.950"
 pytest = "^7.1.1"
-types-requests = "^2.27.25"
+types-requests = "^2.27.27"
 
 [tool.poetry.scripts]
 track-my-ipv6 = "track_my_ipv6:cli"
