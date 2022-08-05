@@ -15,7 +15,7 @@ python = "^3.9"
 url = "https://github.com/georgestarcher/Splunk-Class-httpevent/archive/refs/heads/master.tar.gz"
 
 [tool.poetry.dev-dependencies]
-ifcfg = "^0.22"
+ifcfg = "^0.23"
 tinydb = "^4.7.0"
 loguru = "^0.6.0"
 requests = "^2.28.1"

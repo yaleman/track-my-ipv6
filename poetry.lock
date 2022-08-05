@@ -114,7 +114,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "ifcfg"
-version = "0.22"
+version = "0.23"
 description = "Python ifconfig wrapper for Unix/Linux/MacOSX + ipconfig for Windows"
 category = "dev"
 optional = false
@@ -424,7 +424,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "fb422751dc9f227aa9e833b731e0a40db1614b6af92a6bb6ce1f47fb6f9c9b2c"
+content-hash = "27aea24d6d3ce1e0e686415deca3da17d60c10f486fe95bffd91cb254ea2ff9c"
 
 [metadata.files]
 astroid = [
@@ -489,8 +489,8 @@ idna = [
     {file = "idna-3.3.tar.gz", hash = "sha256:9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d"},
 ]
 ifcfg = [
-    {file = "ifcfg-0.22-py2.py3-none-any.whl", hash = "sha256:835825759d7a27ae1b11577f826b9ebbda716fc69c47805c8844fd516346e81a"},
-    {file = "ifcfg-0.22.tar.gz", hash = "sha256:2960e94e197092877309905dbe18a297c48585f88007be265e0593adae640cd1"},
+    {file = "ifcfg-0.23-py2.py3-none-any.whl", hash = "sha256:2a9f085387340893093a8f2089867b8a7d1de496a0f3a98d9c9a663a3a38d50d"},
+    {file = "ifcfg-0.23.tar.gz", hash = "sha256:624b5ac541693ccd3e2cecc348c0e88154ded4aaadd254cb231212dfaafdbd02"},
 ]
 iniconfig = [
     {file = "iniconfig-1.1.1-py2.py3-none-any.whl", hash = "sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3"},
