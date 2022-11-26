@@ -10,3 +10,4 @@ dist/
 .env
 build/
 track-my-ipv6.json
+poetry.lock
